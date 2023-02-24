@@ -1,6 +1,7 @@
 #ifndef ROUTER
 #define ROUTER
 
+#include "Route.h"
 #include <vector>
 #include <string> 
 
@@ -23,7 +24,7 @@ public:
 	void PATCH(win::SOCKET socket, std::string* path, std::string* data);
 	void DELETE(win::SOCKET socket, std::string* path, std::string* data);
 private:
-	std:vector<Route *> routes;
+	std::vector<Route *> routes;
 	size_t defaultRoute;
 };
 

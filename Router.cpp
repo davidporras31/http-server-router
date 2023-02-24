@@ -11,7 +11,7 @@ Router::~Router(){
 }
 
 void Router::addRoute(Route * route){
-	this->routes.pushback(route);
+	this->routes.push_back(route);
 }
 void Router::setDefaultRoute(std::string name){
 	for (int i = 0; i < this->routes.size(); ++i)
@@ -28,14 +28,17 @@ void Router::setDefaultRoute(std::string name){
 	for (int i = 0; i < this->routes.size(); ++i)\
 	{\
 		Route * tmp = this->routes.at(i);\
-		if(tmp->getName() == path.cstr(0,tmp->getName().lenght())){\
-			tmp->GET(socket,path->cstr(tmp->getName().lenght(),path->lenght()),data);\
-			this->flipflop = flase;\
+		if(tmp->getName().length() >= path->length())\
+		if(tmp->getName() == path->substr(0,tmp->getName().length())){\
+			tmp->NETHODE(socket, path->substr(tmp->getName().length()), data);\
+			flipflop = false;\
 			break;\
 		}\
 	}\
 	if(flipflop){\
-		this->routes.at(this->defaultRoute)->GET(socket,path->cstr(this->routes.at(this->defaultRoute)->getName().lenght(),path->lenght()),data);\
+		this->routes.at(this->defaultRoute)->setRedirected(true);\
+		this->routes.at(this->defaultRoute)->NETHODE(socket, *path, data);\
+		this->routes.at(this->defaultRoute)->setRedirected(false);\
 	}
 
 void Router::GET(win::SOCKET socket, std::string* path, std::string* data){
