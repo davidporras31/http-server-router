@@ -2,6 +2,7 @@
 #define ROUTER
 
 #include "Route.h"
+#include <SFML/Network/TcpSocket.hpp>
 #include <vector>
 #include <string> 
 
@@ -12,17 +13,19 @@ public:
 	~Router();
 
 	void addRoute(Route * route);
+	Route* getRoute(size_t id);
 	void setDefaultRoute(std::string name);
+	size_t getDefaultRoute();
 
-	void GET(win::SOCKET socket, std::string* path, std::string* data);
-	void HEAD(win::SOCKET socket, std::string* path, std::string* data);
-	void POST(win::SOCKET socket, std::string* path, std::string* data);
-	void OPTIONS(win::SOCKET socket, std::string* path, std::string* data);
-	void CONNECT(win::SOCKET socket, std::string* path, std::string* data);
-	void TRACE(win::SOCKET socket, std::string* path, std::string* data);
-	void PUT(win::SOCKET socket, std::string* path, std::string* data);
-	void PATCH(win::SOCKET socket, std::string* path, std::string* data);
-	void DELETE(win::SOCKET socket, std::string* path, std::string* data);
+	bool GET(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool HEAD(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool POST(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool OPTIONS(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool CONNECT(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool TRACE(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool PUT(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool PATCH(sf::TcpSocket * socket, std::string* path, std::string* data);
+	bool DELETE(sf::TcpSocket * socket, std::string* path, std::string* data);
 private:
 	std::vector<Route *> routes;
 	size_t defaultRoute;

@@ -2,7 +2,6 @@
 
 Route::Route(){
 	this->name = "";
-	this->redirected = false;
 }
 Route::~Route(){
 
@@ -15,12 +14,7 @@ std::string Route::getName(){
 	return this->name;
 }
 
-bool Route::isRedirected()
+std::string Route::getPath()
 {
-	return this->redirected;
-}
-
-void Route::setRedirected(bool redirected)
-{
-	this->redirected = redirected;
+	return "./" + this->getName();
 }

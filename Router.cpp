@@ -4,7 +4,7 @@ Router::Router(){
 	this->defaultRoute = 0;
 }
 Router::~Router(){
-	for (int i = 0; i < this->routes.size(); ++i)
+	for (size_t i = 0; i < this->routes.size(); ++i)
 	{
 		delete this->routes.at(i);
 	}
@@ -13,8 +13,12 @@ Router::~Router(){
 void Router::addRoute(Route * route){
 	this->routes.push_back(route);
 }
+Route* Router::getRoute(size_t id)
+{
+	return this->routes.at(id);
+}
 void Router::setDefaultRoute(std::string name){
-	for (int i = 0; i < this->routes.size(); ++i)
+	for (size_t i = 0; i < this->routes.size(); ++i)
 	{
 		if(this->routes.at(i)->getName() == name){
 			this->defaultRoute = i;
@@ -23,51 +27,70 @@ void Router::setDefaultRoute(std::string name){
 	}
 }
 
+size_t Router::getDefaultRoute()
+{
+	return this->defaultRoute;
+}
+
 #define REQUEST(NETHODE)\
-	bool flipflop = true;\
+	bool routeNotFound = true;\
 	if(this->routes.size() != 0)\
 	{\
-		for (int i = 0; i < this->routes.size(); ++i)\
+		for (size_t i = 0; i < this->routes.size(); ++i)\
 		{\
 			Route * tmp = this->routes.at(i);\
-			if(tmp->getName().length() >= path->length())\
-			if(tmp->getName() == path->substr(0,tmp->getName().length())){\
+			if(tmp->getName().length()+1 >= path->length())\
+			if(tmp->getName() == path->substr(1,tmp->getName().length())){\
 				tmp->NETHODE(socket, path->substr(tmp->getName().length()), data);\
-				flipflop = false;\
+				routeNotFound = false;\
 				break;\
 			}\
 		}\
-		if(flipflop){\
-			this->routes.at(this->defaultRoute)->setRedirected(true);\
+		if(routeNotFound){\
 			this->routes.at(this->defaultRoute)->NETHODE(socket, *path, data);\
-			this->routes.at(this->defaultRoute)->setRedirected(false);\
 		}\
-	}
+	}\
+	return routeNotFound;
 
-void Router::GET(win::SOCKET socket, std::string* path, std::string* data){
-	REQUEST(GET)
+bool Router::GET(sf::TcpSocket * socket, std::string* path, std::string* data){
+	//REQUEST(GET)
+	bool routeNotFound = true;
+	if (this->routes.size() != 0)
+	{
+		for (size_t i = 0; i < this->routes.size(); ++i)
+		{
+			Route* tmp = this->routes.at(i);
+			if (tmp->getName().length() + 1 <= path->length())
+				if (tmp->getName() == path->substr(1, tmp->getName().length())) {
+					tmp->GET(socket, path->substr(tmp->getName().length() + 1), data);
+					routeNotFound = false;
+					break;
+				}
+		}
+	}
+	return routeNotFound;
 }
-void Router::HEAD(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::HEAD(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(HEAD)
 }
-void Router::POST(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::POST(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(POST)
 }
-void Router::OPTIONS(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::OPTIONS(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(OPTIONS)
 }
-void Router::CONNECT(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::CONNECT(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(CONNECT)
 }
-void Router::TRACE(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::TRACE(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(TRACE)
 }
-void Router::PUT(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::PUT(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(PUT)
 }
-void Router::PATCH(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::PATCH(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(PATCH)
 }
-void Router::DELETE(win::SOCKET socket, std::string* path, std::string* data){
+bool Router::DELETE(sf::TcpSocket * socket, std::string* path, std::string* data){
 	REQUEST(DELETE)
 }
