@@ -17,14 +17,39 @@ Route* Router::getRoute(size_t id)
 {
 	return this->routes.at(id);
 }
-void Router::setDefaultRoute(std::string name){
-	for (size_t i = 0; i < this->routes.size(); ++i)
+Route* Router::getRoute(std::string name)
+{
+	size_t id = this->getRouteId(name);
+	return (id != SIZE_MAX) ? this->getRoute(id) : NULL;
+}
+size_t Router::getRouteId(std::string name)
+{
+	size_t ret = SIZE_MAX;
+
+	for (size_t i = 0; i < this->routes.size(); i++)
 	{
-		if(this->routes.at(i)->getName() == name){
-			this->defaultRoute = i;
+		if (this->getRoute(i)->getName() == name)
+		{
+			ret = i;
 			break;
 		}
 	}
+
+	return ret;
+}
+void Router::remove(size_t id)
+{
+	this->routes.erase(this->routes.begin() + id);
+}
+void Router::remove(std::string name)
+{
+	size_t id = this->getRouteId(name);
+	if(id != SIZE_MAX) 
+		this->remove(id);
+}
+void Router::setDefaultRoute(std::string name){
+	size_t id = this->getRouteId(name);
+	this->defaultRoute = (id != SIZE_MAX) ? id : 0;
 }
 
 size_t Router::getDefaultRoute()

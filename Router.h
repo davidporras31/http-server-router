@@ -14,6 +14,10 @@ public:
 
 	void addRoute(Route * route);
 	Route* getRoute(size_t id);
+	Route* getRoute(std::string name);
+	size_t getRouteId(std::string name);
+	void remove(size_t id);
+	void remove(std::string name);
 	void setDefaultRoute(std::string name);
 	size_t getDefaultRoute();
 
