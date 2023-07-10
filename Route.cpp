@@ -8,7 +8,8 @@ Route::~Route(){
 }
 
 void Route::setName(std::string name){
-	this->name = name;
+	if (this->name == "")
+		this->name = name;
 }
 std::string Route::getName(){
 	return this->name;

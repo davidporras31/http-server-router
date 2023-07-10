@@ -11,8 +11,17 @@ public:
 	~Route();
 
 	void setName(std::string name);
+	/* 
+	* \brief get the route name
+	* 
+	* \return the route name
+	*/
 	std::string getName();
-	
+	/*
+	* \brief get the route path
+	*
+	* \return the route path
+	*/
 	std::string getPath();
 
 	virtual void GET(sf::TcpSocket * socket, std::string path, std::string* data) = 0;
